@@ -1,0 +1,30 @@
+
+<?php
+session_start();
+?>
+<html>
+<head>
+</head>
+<body>
+
+<form method="post" action="newacc.php">
+Name:(Characters only)<br>
+<input type="text" name="fname" required pattern="[a-zA-Z]{1,10}">
+<br>
+Account Number:<br>
+<input type="number" name="accnumber" value="Enter Account number" required placeholder='Must be a number'>
+<br>
+Username(Characters only):<br>
+<input type="text" name="username" value="" required placeholder='enter username'>
+<br>
+Password:<br>
+<input type="text" name="pass" value="" required placeholder='enter password'>
+<br>
+Phone:<br>
+<input type="number" name="phone" value="Enter Phone number" >
+<br>
+<br>
+ <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</body>
+</html>

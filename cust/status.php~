@@ -1,0 +1,37 @@
+<?php
+session_start();
+?>
+<html>
+<head>
+<meta http-equiv="refresh" content="5">
+</head>
+<body>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "canteen2";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+$cussid=$_SESSION['custid'];
+
+$sql = "SELECT * FROM order_l WHERE cus_id=$cussid";
+$result = mysqli_query($conn, $sql);
+$test=mysqli_num_rows($result);
+
+if(mysqli_num_rows($result)==0)
+{
+	echo "YOUR ORDER IS READY COLLECT IT FROM THE COUNTER";
+}
+else
+{
+	echo "KINDLY WAIT.YOUR ORDER IS BEING PREPARED";
+}
+?>
+</body>
+</html>

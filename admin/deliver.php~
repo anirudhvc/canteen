@@ -1,0 +1,66 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "canteen2";
+$tblname="order_log";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //something posted
+	$sql = "SELECT * FROM order_h ORDER BY order_id DESC LIMIT 1";
+	$result = mysqli_query($conn, $sql);
+	$row = mysqli_fetch_assoc($result);
+	$j=$row['order_id'];
+	$sql = "SELECT * FROM order_h ORDER BY order_id ASC LIMIT 1";
+	$result = mysqli_query($conn, $sql);
+	$row = mysqli_fetch_assoc($result);
+	$k=$row['order_id'];
+	
+	for($i=$k;$i<=$j;$i++)
+    if (isset($_POST[$i])) {
+		$var=$i;
+		break;    
+	}
+}
+$sql = "UPDATE order_status SET status='Ready' WHERE order_id=$var";
+mysqli_query($conn, $sql);
+$sql = "SELECT * FROM order_h WHERE 'order_id'=$var";
+$result=mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$itemsid=$row['item_id'];
+echo "$itemsid";
+	$quant=$row['qty'];
+if (!$result) {
+    echo "eeeeeeeeeeeeeeeeeehaaaaaaaaaaaaaaaaa:select error " . mysqli_error($conn);
+}
+
+	
+	$sql = "SELECT * FROM order_l WHERE 'order id'=$var";
+	
+	$result=mysqli_query($conn, $sql);
+	$row = mysqli_fetch_assoc($result);
+	$custid=$row['cus_id'];
+	if (!$result) {
+    echo "eeeeeeeeeeeeeeeeeehaaaaaaaaaaaaaaaaa:select2error " . mysqli_error($conn);
+}
+	//$sql="INSERT INTO $tblname(order_id, cus_id,item_id,quantity) VALUES ('$var','$custid','$itemsid','$quant')";
+echo "$var $custid  $itemsid   $quant";
+//$result=mysqli_query($conn,$sql);
+//if (!$result) {
+ //   echo "eeeeeeeeeeeeeeeeeehaaaaaaaaaaaaaaaaa: " . mysqli_error($conn);
+//}
+$sql="DELETE FROM  `order_h` WHERE order_id =$var";
+mysqli_query($conn, $sql);
+$sql="DELETE FROM  `order_l` WHERE order_id =$var";
+mysqli_query($conn, $sql);
+
+
+
+
+
+?>

@@ -1,0 +1,63 @@
+<?php
+session_start();
+?>
+<html>
+<head>
+<style>
+tr.spaceUnder > td
+{
+  padding-bottom: 1em;
+}
+form { 
+margin: 250px auto; 
+width:250px;
+}
+</style>
+</head>
+<body>
+
+<?php 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "canteen2";
+$cusid=$_SESSION['custid'];
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+$var=$_SESSION['acc_id'];
+$sql = "SELECT * FROM account WHERE acc_id=$var";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+if($row['balance']<$_SESSION['price'])
+{
+	echo "INSUFICIENT BALANCE ";
+}
+else
+{
+	$test=$_SESSION['price'];
+$pay = "UPDATE account SET balance=balance-$test WHERE acc_id=$var";
+if (mysqli_query($conn, $pay)) {
+	  
+ echo "YOUR ORDER HAS BEEN PLACED SUCCESFULLY!";
+ $sql = "INSERT INTO order_l(cus_id)
+VALUES ('$cusid')";
+
+mysqli_query($conn, $sql);
+$query="SELECT order_id FROM order_l WHERE cus_id=$cusid ORDER BY order_id DESC LIMIT 1";
+	$result=mysqli_query($conn, $query);
+	$var=mysqli_fetch_assoc($result);
+	$ani=$var['order_id'];$qty=$_SESSION['qty'];$id=$_SESSION['id'];
+$new1="INSERT INTO order_h(order_id,item_id,qty)
+VALUES ($ani,$id,$qty)";
+mysqli_query($conn, $new1);
+
+}
+}
+?>
+<form method="POST" action="cust1.php"><input type="submit" value="click"></form>
+</body>
+</html>
